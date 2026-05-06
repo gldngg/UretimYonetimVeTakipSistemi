@@ -192,8 +192,8 @@ Service sınıfları ilgili interface yapılarını implement etmektedir.
 Örnek:
 
 
-public class SiparisService implements ISiparisIslemleri
-public class MakineService implements IMakineIslemleri
+*public class SiparisService implements ISiparisIslemleri
+*public class MakineService implements IMakineIslemleri
 
 
 Bu yapı ile servis sınıflarında yapılacak işlemler soyut olarak tanımlanmış ve ilgili sınıflarda uygulanmıştır.
