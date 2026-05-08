@@ -1,4 +1,8 @@
+Mevcut README’yi koruyup **yeni `AnaMenuEkrani` kalıtım değişikliğine göre güncelledim**. Özellikle `ui`, `Inheritance`, `Admin Menü`, `Operatör Menü` ve ortak ekran yapısı kısımlarını düzelttim. Mevcut README içeriğini baz aldım. 
 
+Aşağıdakini direkt **README.md** içine kopyalayabilirsin:
+
+````markdown
 # Üretim Yönetim ve Takip Sistemi
 
 Bu proje, üretim süreçlerinde makine, sipariş, planlama, duruş/kayıp ve raporlama işlemlerini takip etmek amacıyla geliştirilmiş bir masaüstü uygulamasıdır.
@@ -17,6 +21,9 @@ Proje Java programlama dili ile geliştirilmiştir. Kullanıcı arayüzü için 
 
 - Kullanıcı kayıt ve giriş işlemleri yapılabilir.
 - Admin ve operatör rolleri ayrılabilir.
+- Admin ve operatör için ayrı ana menü ekranları bulunur.
+- Admin ve operatör menüleri ortak `AnaMenuEkrani` sınıfından kalıtım alır.
+- Ana menü ekranlarında ikonlu butonlar ile ilgili modüllere geçiş yapılabilir.
 - Makine bilgileri eklenebilir, güncellenebilir ve silinebilir.
 - Sipariş bilgileri eklenebilir, güncellenebilir ve silinebilir.
 - Siparişlere iş emri eklenebilir.
@@ -43,7 +50,7 @@ UretimYonetimTakipSistemi
 ├── .classpath
 ├── .project
 └── README.md
-```
+````
 
 ## Paket Açıklamaları
 
@@ -57,7 +64,8 @@ Bu paketteki temel sınıflar:
 * `Session.java`
 
 `Veritabani.java`, SQLite bağlantısını kurar ve gerekli tabloları oluşturur.
-`Session.java`, giriş yapan aktif kullanıcının kullanıcı adı ve rol bilgisini tutar.
+
+`Session.java`, giriş yapan aktif kullanıcının kullanıcı adı ve rol bilgisini tutar. Bu bilgiler, kullanıcının hangi ekrana ve hangi yetkilere sahip olacağını belirlemek için kullanılır.
 
 ### model
 
@@ -72,6 +80,8 @@ Projede kullanılan temel veri sınıfları bu pakette yer alır.
 * `Siparis.java`
 * `Planlama.java`
 * `DurusKayip.java`
+
+Bu sınıflar sistemde kullanılan temel nesneleri temsil eder.
 
 ### service
 
@@ -101,6 +111,8 @@ Service sınıflarının uyguladığı interface yapıları bu pakette yer alır
 * `IDurusKayipIslemleri.java`
 * `IRaporIslemleri.java`
 
+Interface kullanımı sayesinde service sınıflarında yapılacak işlemler soyut olarak tanımlanmış ve ilgili sınıflarda uygulanmıştır.
+
 ### ui
 
 Kullanıcı arayüzü ekranları bu pakette yer alır.
@@ -109,16 +121,21 @@ Kullanıcı arayüzü ekranları bu pakette yer alır.
 
 * `GirisEkrani.java`
 * `KayitEkrani.java`
+* `AnaMenuEkrani.java`
 * `AdminMenuEkrani.java`
 * `OperatorMenuEkrani.java`
+* `OrtakEkran.java`
 * `MakineGirisEkrani.java`
 * `SiparisEkrani.java`
 * `PlanlamaEkrani.java`
 * `DurusKayipEkrani.java`
 * `RaporEkrani.java`
-* `OrtakEkran.java`
 
-`OrtakEkran.java`, işlem ekranlarında kullanılan ortak pencere yapısını ve üst menüyü içerir.
+`AnaMenuEkrani.java`, admin ve operatör ana menülerinde kullanılan ortak menü yapısını içerir. Bu sınıfta pencere ayarları, başlık alanı, çıkış butonu, ikon oluşturma, menü elemanı ekleme ve ekranlar arası geçiş işlemleri ortak olarak tanımlanmıştır.
+
+`AdminMenuEkrani.java` ve `OperatorMenuEkrani.java`, `AnaMenuEkrani` sınıfından kalıtım alır. Bu iki sınıf yalnızca kendi rollerine uygun menü elemanlarını ekler.
+
+`OrtakEkran.java`, makine, sipariş, planlama, duruş/kayıp ve rapor gibi işlem ekranlarında kullanılan ortak üst menü ve pencere yapısını içerir.
 
 ## Kullanıcı Rolleri
 
@@ -137,6 +154,15 @@ Admin kullanıcısı:
 * Planlama ekranında iş emri ekleyebilir/silebilir.
 * Raporlama ekranını görüntüleyebilir.
 
+Admin giriş yaptığında `AdminMenuEkrani` açılır. Bu ekran `AnaMenuEkrani` sınıfından kalıtım alır ve admin kullanıcısına uygun menü elemanlarını gösterir.
+
+Admin ana menüsünde bulunan temel ekranlar:
+
+* Raporlar
+* Makine Girişi
+* Planlama
+* Sipariş Girişi
+
 ### Operatör
 
 Operatör kullanıcısı daha sınırlı yetkilere sahiptir.
@@ -150,6 +176,15 @@ Operatör kullanıcısı:
 * Sipariş girişi yapamaz.
 * Planlama ekranında güncelleme veya silme işlemi yapamaz.
 
+Operatör giriş yaptığında `OperatorMenuEkrani` açılır. Bu ekran `AnaMenuEkrani` sınıfından kalıtım alır ve operatör kullanıcısına uygun menü elemanlarını gösterir.
+
+Operatör ana menüsünde bulunan temel ekranlar:
+
+* Raporlar
+* Makine Girişi
+* Planlama
+* Duruş/Kayıp
+
 ## OOP Kullanımı
 
 Projede nesne yönelimli programlama yapıları kullanılmıştır.
@@ -158,32 +193,75 @@ Projede nesne yönelimli programlama yapıları kullanılmıştır.
 
 Model sınıflarında değişkenler `private` olarak tanımlanmıştır. Bu değişkenlere erişim getter metotları ile sağlanmıştır.
 
+Bu yapı sayesinde sınıfların içindeki veriler dışarıdan doğrudan değiştirilemez. Böylece veri güvenliği ve kod düzeni sağlanır.
+
 ### Inheritance
 
 Projede kalıtım yapısı kullanılmıştır.
 
 Kullanıcı rolleri için:
 
+```java
+public class Admin extends Kullanici
+```
 
-* public class Admin extends Kullanici
-* public class Operator extends Kullanici
+```java
+public class Operator extends Kullanici
+```
 
+Menü ekranları için:
 
-Ekran yapıları için:
+```java
+public class AnaMenuEkrani extends JFrame
+```
 
-* public class OrtakEkran extends JFrame
-* public class SiparisEkrani extends OrtakEkran
-* public class PlanlamaEkrani extends OrtakEkran
-* public class RaporEkrani extends OrtakEkran
-* public class MakineGirisEkrani extends OrtakEkran
-* public class DurusKayipEkrani extends OrtakEkran
+```java
+public class AdminMenuEkrani extends AnaMenuEkrani
+```
 
+```java
+public class OperatorMenuEkrani extends AnaMenuEkrani
+```
 
-`OrtakEkran` sınıfı sayesinde işlem ekranlarında kullanılan ortak pencere ayarları, üst menü, renkler ve rol kontrolleri tek merkezde toplanmıştır.
+İşlem ekranları için:
+
+```java
+public class OrtakEkran extends JFrame
+```
+
+```java
+public class SiparisEkrani extends OrtakEkran
+```
+
+```java
+public class PlanlamaEkrani extends OrtakEkran
+```
+
+```java
+public class RaporEkrani extends OrtakEkran
+```
+
+```java
+public class MakineGirisEkrani extends OrtakEkran
+```
+
+```java
+public class DurusKayipEkrani extends OrtakEkran
+```
+
+`AnaMenuEkrani` sınıfı sayesinde admin ve operatör ana menülerindeki ortak pencere yapısı, başlık alanı, çıkış işlemi, ikon oluşturma ve menü elemanı ekleme işlemleri tek merkezde toplanmıştır.
+
+`AdminMenuEkrani` ve `OperatorMenuEkrani` sınıfları, ortak menü yapısını tekrar yazmak yerine `AnaMenuEkrani` sınıfını miras alır. Böylece kod tekrarı azaltılmıştır.
+
+`OrtakEkran` sınıfı ise işlem ekranlarında kullanılan ortak üst menü, renkler, pencere ayarları ve rol kontrollerini içerir.
 
 ### Polymorphism
 
-`Kullanici` sınıfında bulunan `yetkiBilgisi()` metodu, `Admin` ve `Operator` sınıflarında override edilmiştir. Böylece kullanıcının rolüne göre farklı yetki bilgisi döndürülebilmektedir.
+`Kullanici` sınıfında bulunan `yetkiBilgisi()` metodu, `Admin` ve `Operator` sınıflarında override edilmiştir.
+
+Böylece aynı metot, kullanıcının rolüne göre farklı sonuç döndürebilmektedir.
+
+Örneğin admin kullanıcısı için admin yetki bilgisi, operatör kullanıcısı için operatör yetki bilgisi döndürülür.
 
 ### Interface Kullanımı
 
@@ -191,18 +269,60 @@ Service sınıfları ilgili interface yapılarını implement etmektedir.
 
 Örnek:
 
+```java
+public class SiparisService implements ISiparisIslemleri
+```
 
-* public class SiparisService implements ISiparisIslemleri
-* public class MakineService implements IMakineIslemleri
+```java
+public class MakineService implements IMakineIslemleri
+```
 
+```java
+public class PlanlamaService implements IPlanlamaIslemleri
+```
 
 Bu yapı ile servis sınıflarında yapılacak işlemler soyut olarak tanımlanmış ve ilgili sınıflarda uygulanmıştır.
+
+### Design Pattern Kullanımı
+
+Projede veritabanı bağlantısı için Singleton mantığı kullanılmıştır.
+
+`Veritabani` sınıfı üzerinden tek bir veritabanı bağlantısı yönetilir. Böylece uygulamanın farklı yerlerinde tekrar tekrar bağlantı oluşturmak yerine merkezi bir bağlantı yapısı kullanılmış olur.
+
+Bu yapı kaynak kullanımını azaltır ve veritabanı işlemlerinin daha düzenli yönetilmesini sağlar.
+
+## Ana Menü Yapısı
+
+Projede admin ve operatör kullanıcıları için ayrı ana menü ekranları bulunmaktadır. Ancak bu ekranlarda tekrar eden kodları azaltmak için ortak bir `AnaMenuEkrani` sınıfı oluşturulmuştur.
+
+`AnaMenuEkrani` sınıfında şu ortak işlemler bulunur:
+
+* Ana menü pencere boyutu ve arka plan rengi
+* Üst başlık alanı
+* Aktif kullanıcı adının gösterilmesi
+* Çıkış butonu
+* Menü ikonlarının oluşturulması
+* Menü butonlarının oluşturulması
+* Menü başlıklarının oluşturulması
+* Buton hover ve basılma renkleri
+* İlgili ekrana yönlendirme işlemleri
+
+`AdminMenuEkrani` ve `OperatorMenuEkrani` sınıfları bu ortak yapıyı kullanır. Bu sınıfların görevi sadece kendi rollerine ait menü elemanlarını eklemektir.
+
+Örneğin admin menüsünde sipariş girişi bulunurken, operatör menüsünde duruş/kayıp ekranı bulunur.
+
+Bu yapı sayesinde:
+
+* Kod tekrarı azaltılmıştır.
+* Admin ve operatör menüleri daha düzenli hale getirilmiştir.
+* Yeni bir rol eklenmek istenirse ortak menü yapısı tekrar kullanılabilir.
+* Menü tasarımındaki değişiklikler tek bir sınıf üzerinden yönetilebilir.
 
 ## Veritabanı
 
 Projede SQLite veritabanı kullanılmıştır.
 
-Veritabanı dosyası GitHub’a eklenmemiştir. Program ilk çalıştırıldığında `uys.db` dosyası otomatik olarak oluşturulur ve gerekli tablolar hazırlanır.
+Program ilk çalıştırıldığında `uys.db` dosyası otomatik olarak oluşturulur ve gerekli tablolar hazırlanır.
 
 Oluşturulan temel tablolar:
 
@@ -229,15 +349,15 @@ gerçekleştirilmiştir.
 
 SQLite bağlantısı için kullanılan JDBC jar dosyası proje içinde `lib` klasöründe yer almaktadır.
 
-
+```text
 lib/sqlite-jdbc-3.53.0.0.jar
-
+```
 
 Bu nedenle proje farklı bir bilgisayarda açıldığında ayrıca jar dosyası indirmeye gerek yoktur.
 
 ## İlk Çalıştırma
 
-Bu projede hazır veritabanı dosyası bulunmadığı için ilk kullanımda kullanıcı oluşturulmalıdır.
+Bu projede hazır kullanıcı bilgisi bulunmayabileceği için ilk kullanımda kullanıcı oluşturulmalıdır.
 
 İlk çalıştırma adımları:
 
@@ -246,6 +366,7 @@ Bu projede hazır veritabanı dosyası bulunmadığı için ilk kullanımda kull
 3. Açılan giriş ekranında **Kayıt Ol** butonuna basılır.
 4. Admin veya Operatör rolünde kullanıcı oluşturulur.
 5. Oluşturulan kullanıcı adı, şifre ve rol bilgisi ile giriş yapılır.
+6. Kullanıcı rolüne göre admin veya operatör ana menüsüne yönlendirilir.
 
 ## Eclipse Üzerinde Çalıştırma
 
@@ -256,13 +377,15 @@ Projeyi Eclipse üzerinde çalıştırmak için:
 3. `File > Import > Existing Projects into Workspace` seçilir.
 4. Proje klasörü seçilir.
 5. Proje import edilir.
-6. `GirisEkrani.java` çalıştırılır.
+6. `src/ui/GirisEkrani.java` dosyası çalıştırılır.
 
 ## Temel Ekranlar
 
 ### Giriş Ekranı
 
 Kullanıcı adı, şifre ve rol bilgisi ile sisteme giriş yapılır.
+
+Giriş başarılı olursa kullanıcının rolüne göre `AdminMenuEkrani` veya `OperatorMenuEkrani` açılır.
 
 ### Kayıt Ekranı
 
@@ -272,25 +395,59 @@ Yeni admin veya operatör kullanıcısı oluşturulur.
 
 Admin kullanıcısının erişebileceği ekranlara yönlendirme yapılır.
 
+Admin menüsü `AnaMenuEkrani` sınıfından kalıtım alır. Bu sayede ortak menü tasarımı ve yönlendirme işlemleri tekrar yazılmadan kullanılır.
+
+Admin menüsünde bulunan ekranlar:
+
+* Raporlar
+* Makine Girişi
+* Planlama
+* Sipariş Girişi
+
 ### Operatör Menü
 
 Operatör kullanıcısının erişebileceği ekranlara yönlendirme yapılır.
+
+Operatör menüsü `AnaMenuEkrani` sınıfından kalıtım alır. Bu sayede admin menüsü ile ortak olan tasarım ve yönlendirme işlemleri tek bir sınıfta tutulur.
+
+Operatör menüsünde bulunan ekranlar:
+
+* Raporlar
+* Makine Girişi
+* Planlama
+* Duruş/Kayıp
 
 ### Makine Girişi
 
 Makine tipi, makine kodu, bölüm, kapasite, bakım periyodu ve lokasyon bilgileri yönetilir.
 
+Bu ekranda makine ekleme, güncelleme, silme ve listeleme işlemleri yapılabilir.
+
 ### Sipariş Girişi
 
-Sipariş adı, sipariş kodu, müşteri, ürün adı, miktar ve termin tarihi bilgileri yönetilir. Siparişlere iş emirleri eklenebilir.
+Sipariş adı, sipariş kodu, müşteri, ürün adı, miktar ve termin tarihi bilgileri yönetilir.
+
+Siparişlere iş emirleri eklenebilir. Bu iş emirleri planlama ekranında kullanılmaktadır.
 
 ### Planlama
 
-İş emirleri takvim üzerinde görüntülenir. Admin, planlama tarihi ve durum güncellemesi yapabilir. Operatör yalnızca görüntüleme yapabilir.
+İş emirleri takvim üzerinde görüntülenir.
+
+Admin kullanıcısı planlama tarihi ve durum güncellemesi yapabilir. Operatör kullanıcısı ise planlama ekranını yalnızca görüntüleme amacıyla kullanabilir.
+
+Planlama durumları:
+
+* Bekliyor
+* Üretimde
+* Bitti
 
 ### Duruş/Kayıp
 
-Makineye ait duruş veya kayıp bilgileri kaydedilir. Başlangıç ve bitiş zamanı seçildiğinde süre otomatik hesaplanır.
+Makineye ait duruş veya kayıp bilgileri kaydedilir.
+
+Başlangıç ve bitiş zamanı seçildiğinde süre otomatik hesaplanır.
+
+Duruş türü planlı veya plansız olarak seçilebilir.
 
 ### Raporlama
 
@@ -309,13 +466,43 @@ Raporlama ekranında şu bilgiler görüntülenir:
 * En çok görülen duruş nedeni
 * Duruş/kayıp rapor tablosu
 
+## Projedeki Kod Tekrarını Azaltan Yapılar
+
+Projede kod tekrarını azaltmak amacıyla ortak sınıflar kullanılmıştır.
+
+### AnaMenuEkrani
+
+`AnaMenuEkrani`, admin ve operatör ana menülerinde ortak olan kodları tek yerde toplar.
+
+Bu sınıf sayesinde aşağıdaki kodlar tekrar tekrar yazılmamıştır:
+
+* Menü penceresi oluşturma
+* Header alanı oluşturma
+* Aktif kullanıcıyı gösterme
+* Çıkış işlemi
+* Menü ikonlarını oluşturma
+* Menü butonlarını oluşturma
+* Buton renk ve hover ayarları
+* Ekranlar arası geçiş işlemleri
+
+### OrtakEkran
+
+`OrtakEkran`, işlem ekranlarında ortak olan üst menü ve tasarım yapısını içerir.
+
+Bu sınıf sayesinde makine, sipariş, planlama, duruş/kayıp ve rapor ekranlarında ortak üst menü yapısı tekrar yazılmadan kullanılmaktadır.
+
 ## Notlar
 
 * Program ilk çalıştırıldığında `uys.db` dosyası otomatik oluşur.
 * İlk giriş için önce kayıt ekranından kullanıcı oluşturulmalıdır.
 * Admin ve operatör rolleri farklı yetkilere sahiptir.
+* Admin ve operatör ana menüleri `AnaMenuEkrani` sınıfından kalıtım alır.
+* İşlem ekranları `OrtakEkran` sınıfından kalıtım alır.
 * Veritabanı işlemleri JDBC ile yapılmaktadır.
 * Kullanıcı arayüzü Java Swing ile geliştirilmiştir.
 * Proje Eclipse IDE üzerinde hazırlanmıştır.
 
 
+
+
+```
