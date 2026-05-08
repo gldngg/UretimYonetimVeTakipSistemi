@@ -505,4 +505,4 @@ Bu sınıf sayesinde makine, sipariş, planlama, duruş/kayıp ve rapor ekranlar
 
 
 
-```
+
