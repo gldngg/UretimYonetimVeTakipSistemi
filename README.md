@@ -2,7 +2,7 @@ Mevcut README’yi koruyup **yeni `AnaMenuEkrani` kalıtım değişikliğine gö
 
 Aşağıdakini direkt **README.md** içine kopyalayabilirsin:
 
-````markdown
+
 # Üretim Yönetim ve Takip Sistemi
 
 Bu proje, üretim süreçlerinde makine, sipariş, planlama, duruş/kayıp ve raporlama işlemlerini takip etmek amacıyla geliştirilmiş bir masaüstü uygulamasıdır.
@@ -37,7 +37,7 @@ Proje Java programlama dili ile geliştirilmiştir. Kullanıcı arayüzü için 
 
 ## Proje Yapısı
 
-```text
+````
 UretimYonetimTakipSistemi
 ├── src
 │   ├── database
@@ -201,51 +201,51 @@ Projede kalıtım yapısı kullanılmıştır.
 
 Kullanıcı rolleri için:
 
-```java
+```
 public class Admin extends Kullanici
 ```
 
-```java
+```
 public class Operator extends Kullanici
 ```
 
 Menü ekranları için:
 
-```java
+```
 public class AnaMenuEkrani extends JFrame
 ```
 
-```java
+```
 public class AdminMenuEkrani extends AnaMenuEkrani
 ```
 
-```java
+```
 public class OperatorMenuEkrani extends AnaMenuEkrani
 ```
 
 İşlem ekranları için:
 
-```java
+```
 public class OrtakEkran extends JFrame
 ```
 
-```java
+```
 public class SiparisEkrani extends OrtakEkran
 ```
 
-```java
+```
 public class PlanlamaEkrani extends OrtakEkran
 ```
 
-```java
+```
 public class RaporEkrani extends OrtakEkran
 ```
 
-```java
+```
 public class MakineGirisEkrani extends OrtakEkran
 ```
 
-```java
+```
 public class DurusKayipEkrani extends OrtakEkran
 ```
 
@@ -269,15 +269,15 @@ Service sınıfları ilgili interface yapılarını implement etmektedir.
 
 Örnek:
 
-```java
+```
 public class SiparisService implements ISiparisIslemleri
 ```
 
-```java
+```
 public class MakineService implements IMakineIslemleri
 ```
 
-```java
+```
 public class PlanlamaService implements IPlanlamaIslemleri
 ```
 
@@ -349,7 +349,7 @@ gerçekleştirilmiştir.
 
 SQLite bağlantısı için kullanılan JDBC jar dosyası proje içinde `lib` klasöründe yer almaktadır.
 
-```text
+```
 lib/sqlite-jdbc-3.53.0.0.jar
 ```
 
