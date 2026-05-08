@@ -74,4 +74,40 @@ public class DurusKayip {
     public String getAciklama() {
         return aciklama;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setMakineTipi(String makineTipi) {
+        this.makineTipi = makineTipi;
+    }
+
+    public void setMakineKodu(String makineKodu) {
+        this.makineKodu = makineKodu;
+    }
+
+    public void setBaslangic(String baslangic) {
+        this.baslangic = baslangic;
+    }
+
+    public void setBitis(String bitis) {
+        this.bitis = bitis;
+    }
+
+    public void setSure(String sure) {
+        this.sure = sure;
+    }
+
+    public void setDurusTuru(String durusTuru) {
+        this.durusTuru = durusTuru;
+    }
+
+    public void setDurusNedeni(String durusNedeni) {
+        this.durusNedeni = durusNedeni;
+    }
+
+    public void setAciklama(String aciklama) {
+        this.aciklama = aciklama;
+    }
 }
