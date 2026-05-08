@@ -27,4 +27,16 @@ public class Kullanici {
     public String getRol() {
         return rol;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setKullaniciAdi(String kullaniciAdi) {
+        this.kullaniciAdi = kullaniciAdi;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
 }
