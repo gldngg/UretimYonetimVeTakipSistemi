@@ -58,4 +58,32 @@ public class Siparis {
     public String getTerminTarihi() {
         return terminTarihi;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setSiparisAdi(String siparisAdi) {
+        this.siparisAdi = siparisAdi;
+    }
+
+    public void setSiparisKodu(String siparisKodu) {
+        this.siparisKodu = siparisKodu;
+    }
+
+    public void setMusteri(String musteri) {
+        this.musteri = musteri;
+    }
+
+    public void setUrunAdi(String urunAdi) {
+        this.urunAdi = urunAdi;
+    }
+
+    public void setMiktar(int miktar) {
+        this.miktar = miktar;
+    }
+
+    public void setTerminTarihi(String terminTarihi) {
+        this.terminTarihi = terminTarihi;
+    }
 }
