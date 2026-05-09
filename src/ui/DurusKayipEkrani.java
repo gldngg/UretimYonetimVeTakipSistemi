@@ -19,6 +19,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,7 +33,6 @@ import service.MakineService;
 public class DurusKayipEkrani extends OrtakEkran {
 
     private static final long serialVersionUID = 1L;
-
 
     private JComboBox<String> cmbMakineTipi;
     private JComboBox<String> cmbMakineKodu;
@@ -52,7 +52,10 @@ public class DurusKayipEkrani extends OrtakEkran {
     private int secilenSatir = -1;
     private int secilenId = -1;
     private boolean duzenlemeModu = false;
-    
+
+    private List<Makine> makineListesi;
+    private boolean comboYukleniyor = false;
+
     private static final DateTimeFormatter TARIH_SAAT_FMT =
             DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
@@ -71,13 +74,13 @@ public class DurusKayipEkrani extends OrtakEkran {
     }
 
     public DurusKayipEkrani() {
-    	super("Duruş/Kayıp");
+        super("Duruş/Kayıp");
 
-    	System.out.println("Aktif kullanıcı: " + Session.aktifKullanici);
+        System.out.println("Aktif kullanıcı: " + Session.aktifKullanici);
 
-    	contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-    	ustMenuOlustur("DURUŞ/KAYIP");
+        ustMenuOlustur("DURUŞ/KAYIP");
 
         JPanel panelForm = new JPanel();
         panelForm.setBounds(20, 100, 1040, 320);
@@ -110,6 +113,12 @@ public class DurusKayipEkrani extends OrtakEkran {
         cmbMakineTipi.setFont(new Font("Tahoma", Font.PLAIN, 13));
         cmbMakineTipi.setBounds(25, 100, 270, 30);
         panelForm.add(cmbMakineTipi);
+
+        cmbMakineTipi.addActionListener(e -> {
+            if (!comboYukleniyor) {
+                makineKodlariniTipeGoreGetir();
+            }
+        });
 
         JLabel lblMakineKodu = new JLabel("Makine Kodu:");
         lblMakineKodu.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -166,6 +175,7 @@ public class DurusKayipEkrani extends OrtakEkran {
             tarihSaatSec(txtBitis);
             sureHesapla();
         });
+
         JLabel lblSure = new JLabel("Süre:");
         lblSure.setFont(new Font("Tahoma", Font.PLAIN, 13));
         lblSure.setBounds(380, 150, 120, 20);
@@ -183,7 +193,7 @@ public class DurusKayipEkrani extends OrtakEkran {
 
         cmbDurusTuru = new JComboBox<>();
         cmbDurusTuru.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        cmbDurusTuru.setModel(new DefaultComboBoxModel<>(new String[] {
+        cmbDurusTuru.setModel(new DefaultComboBoxModel<>(new String[]{
                 "Planlı Duruş",
                 "Plansız Duruş"
         }));
@@ -197,7 +207,7 @@ public class DurusKayipEkrani extends OrtakEkran {
 
         cmbDurusNedeni = new JComboBox<>();
         cmbDurusNedeni.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        cmbDurusNedeni.setModel(new DefaultComboBoxModel<>(new String[] {
+        cmbDurusNedeni.setModel(new DefaultComboBoxModel<>(new String[]{
                 "Arıza",
                 "Bakım",
                 "Malzeme Eksikliği",
@@ -258,7 +268,7 @@ public class DurusKayipEkrani extends OrtakEkran {
         table.setBackground(Color.WHITE);
 
         model = new DefaultTableModel();
-        model.setColumnIdentifiers(new String[] {
+        model.setColumnIdentifiers(new String[]{
                 "ID",
                 "Makine Tipi",
                 "Makine Kodu",
@@ -299,8 +309,13 @@ public class DurusKayipEkrani extends OrtakEkran {
                     duzenlemeModu = true;
                     secilenId = Integer.parseInt(model.getValueAt(satir, 0).toString());
 
-                    cmbMakineTipi.setSelectedItem(model.getValueAt(satir, 1).toString());
-                    cmbMakineKodu.setSelectedItem(model.getValueAt(satir, 2).toString());
+                    String makineTipi = model.getValueAt(satir, 1).toString();
+                    String makineKodu = model.getValueAt(satir, 2).toString();
+
+                    cmbMakineTipi.setSelectedItem(makineTipi);
+                    makineKodlariniTipeGoreGetir();
+                    cmbMakineKodu.setSelectedItem(makineKodu);
+
                     txtBaslangic.setText(model.getValueAt(satir, 3).toString());
                     txtBitis.setText(model.getValueAt(satir, 4).toString());
                     txtSure.setText(model.getValueAt(satir, 5).toString());
@@ -319,15 +334,63 @@ public class DurusKayipEkrani extends OrtakEkran {
     }
 
     private void makineleriComboYukle() {
+        comboYukleniyor = true;
+
         cmbMakineTipi.removeAllItems();
         cmbMakineKodu.removeAllItems();
 
-        List<Makine> makineler = makineService.tumMakineleriGetir();
+        makineListesi = makineService.tumMakineleriGetir();
 
-        for (Makine makine : makineler) {
-            cmbMakineTipi.addItem(makine.getMakineTipi());
-            cmbMakineKodu.addItem(makine.getMakineKodu());
+        for (Makine makine : makineListesi) {
+            String makineTipi = makine.getMakineTipi();
+
+            if (!comboIceriyor(cmbMakineTipi, makineTipi)) {
+                cmbMakineTipi.addItem(makineTipi);
+            }
         }
+
+        comboYukleniyor = false;
+
+        if (cmbMakineTipi.getItemCount() > 0) {
+            cmbMakineTipi.setSelectedIndex(0);
+            makineKodlariniTipeGoreGetir();
+        }
+    }
+
+    private void makineKodlariniTipeGoreGetir() {
+        if (cmbMakineTipi.getSelectedItem() == null || makineListesi == null) {
+            return;
+        }
+
+        String secilenMakineTipi = cmbMakineTipi.getSelectedItem().toString();
+
+        comboYukleniyor = true;
+
+        cmbMakineKodu.removeAllItems();
+
+        for (Makine makine : makineListesi) {
+            if (makine.getMakineTipi().equals(secilenMakineTipi)) {
+                if (!comboIceriyor(cmbMakineKodu, makine.getMakineKodu())) {
+                    cmbMakineKodu.addItem(makine.getMakineKodu());
+                }
+            }
+        }
+
+        comboYukleniyor = false;
+
+        if (cmbMakineKodu.getItemCount() > 0) {
+            cmbMakineKodu.setSelectedIndex(0);
+        }
+    }
+
+    private boolean comboIceriyor(JComboBox<String> comboBox, String deger) {
+        for (int i = 0; i < comboBox.getItemCount(); i++) {
+            if (comboBox.getItemAt(i).equals(deger)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void kaydetVeyaGuncelle() {
@@ -384,7 +447,7 @@ public class DurusKayipEkrani extends OrtakEkran {
             }
         }
     }
-    
+
     private void tarihSaatSec(JTextField hedefAlan) {
         JComboBox<Integer> gunBox = new JComboBox<>();
         JComboBox<Integer> ayBox = new JComboBox<>();
@@ -472,7 +535,7 @@ public class DurusKayipEkrani extends OrtakEkran {
 
     private int ayinGunSayisi(int ay, int yil) {
         if (ay == 2) {
-        	if(java.time.Year.isLeap(yil)) {
+            if (java.time.Year.isLeap(yil)) {
                 return 29;
             } else {
                 return 28;
@@ -524,7 +587,7 @@ public class DurusKayipEkrani extends OrtakEkran {
         List<DurusKayip> duruslar = durusKayipService.tumDurusKayiplariGetir();
 
         for (DurusKayip durus : duruslar) {
-            model.addRow(new Object[] {
+            model.addRow(new Object[]{
                     durus.getId(),
                     durus.getMakineTipi(),
                     durus.getMakineKodu(),
@@ -554,9 +617,6 @@ public class DurusKayipEkrani extends OrtakEkran {
                 new String[]{"Evet", "Hayır"},
                 "Hayır"
         );
-        
-       
-   
 
         if (cevap == JOptionPane.YES_OPTION) {
             boolean sonuc = durusKayipService.durusKayipSil(secilenId);
@@ -574,6 +634,7 @@ public class DurusKayipEkrani extends OrtakEkran {
     private void formTemizle() {
         if (cmbMakineTipi.getItemCount() > 0) {
             cmbMakineTipi.setSelectedIndex(0);
+            makineKodlariniTipeGoreGetir();
         }
 
         if (cmbMakineKodu.getItemCount() > 0) {
@@ -594,9 +655,5 @@ public class DurusKayipEkrani extends OrtakEkran {
         btnKaydet.setText("Kaydet");
         btnTemizle.setText("Temizle");
         table.clearSelection();
-    
-  
     }
-
-    
 }
