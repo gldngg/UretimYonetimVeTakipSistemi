@@ -507,17 +507,7 @@ public class SiparisEkrani extends OrtakEkran {
             return;
         }
 
-        int cevap = JOptionPane.showOptionDialog(
-                this,
-                "Seçili sipariş silinsin mi?\n" + secilenSiparisKodu,
-                "Sipariş Sil",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                new String[]{"Evet", "Hayır"},
-                "Hayır"
-        );
-        if (cevap == JOptionPane.YES_OPTION) {
+        if (silmeOnayi("Seçili sipariş silinsin mi?\n" + secilenSiparisKodu)) {
 
             planlamaService.siparisPlanlamalariniSil(siparis.getId());
 
