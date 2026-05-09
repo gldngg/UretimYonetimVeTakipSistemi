@@ -26,6 +26,12 @@ public class AnaMenuEkrani extends JFrame {
     protected final Color HOVER_RENK = new Color(160, 172, 225);
     protected final Color BASILI_RENK = new Color(120, 135, 200);
 
+    
+    protected final int MENU_START_X = 175;
+    protected final int MENU_ICON_Y = 250;
+    protected final int MENU_LABEL_Y = 375;
+    protected final int MENU_GAP = 220;
+
     public AnaMenuEkrani(String baslik) {
 
         setTitle(baslik);
@@ -44,6 +50,7 @@ public class AnaMenuEkrani extends JFrame {
     }
 
     private void headerOlustur() {
+
         JPanel headerPanel = new JPanel();
         headerPanel.setBackground(HEADER);
         headerPanel.setBounds(0, 0, 1100, 80);
@@ -64,7 +71,32 @@ public class AnaMenuEkrani extends JFrame {
         btnCikis.addActionListener(e -> cikisYap());
     }
 
-    protected void menuElemaniEkle(String labelText, String iconPath, int x, int iconY, int labelY, String hedefEkran) {
+    
+    protected void ortakMenuElemanlariniEkle() {
+
+        menuElemaniEkle("Raporlar", "/ui/raporlar.png",
+                MENU_START_X,
+                MENU_ICON_Y,
+                MENU_LABEL_Y,
+                "rapor");
+
+        menuElemaniEkle("Makine Girişi", "/ui/makineGirisi.png",
+                MENU_START_X + MENU_GAP,
+                MENU_ICON_Y,
+                MENU_LABEL_Y,
+                "makine");
+
+        menuElemaniEkle("Planlama", "/ui/planlama.png",
+                MENU_START_X + MENU_GAP * 2,
+                MENU_ICON_Y,
+                MENU_LABEL_Y,
+                "planlama");
+    }
+
+    protected void menuElemaniEkle(String labelText, String iconPath,
+                                   int x, int iconY, int labelY,
+                                   String hedefEkran) {
+
         ImageIcon icon = iconOlustur(iconPath);
 
         JButton btn = butonOlustur(x, iconY, icon);
@@ -77,6 +109,7 @@ public class AnaMenuEkrani extends JFrame {
     }
 
     private void ekranaGit(String hedefEkran) {
+
         switch (hedefEkran) {
 
             case "rapor":
@@ -111,13 +144,16 @@ public class AnaMenuEkrani extends JFrame {
     }
 
     private void cikisYap() {
+
         Session.aktifKullanici = "";
         Session.aktifRol = "";
+
         new GirisEkrani().setVisible(true);
         dispose();
     }
 
     protected ImageIcon iconOlustur(String path) {
+
         URL url = getClass().getResource(path);
 
         if (url == null) {
@@ -127,10 +163,12 @@ public class AnaMenuEkrani extends JFrame {
 
         ImageIcon icon = new ImageIcon(url);
         Image img = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+
         return new ImageIcon(img);
     }
 
     protected JButton butonOlustur(int x, int y, ImageIcon icon) {
+
         JButton btn = new JButton(icon);
 
         btn.setBounds(x, y, 150, 120);
@@ -141,6 +179,7 @@ public class AnaMenuEkrani extends JFrame {
         btn.setFocusPainted(false);
 
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
+
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 btn.setBackground(HOVER_RENK);
@@ -166,11 +205,14 @@ public class AnaMenuEkrani extends JFrame {
     }
 
     protected JLabel labelOlustur(String text, int x, int y) {
+
         JLabel lbl = new JLabel(text);
+
         lbl.setBounds(x, y, 150, 30);
         lbl.setFont(new Font("Tahoma", Font.BOLD, 18));
         lbl.setForeground(HEADER);
         lbl.setHorizontalAlignment(SwingConstants.CENTER);
+
         return lbl;
     }
 }
