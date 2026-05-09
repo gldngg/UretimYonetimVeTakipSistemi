@@ -8,7 +8,6 @@ import database.Veritabani;
 import interfaces.IKullaniciIslemleri;
 import model.Kullanici;
 
-
 public class KullaniciService implements IKullaniciIslemleri {
 
     @Override
