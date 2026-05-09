@@ -6,9 +6,7 @@ import java.sql.SQLException;
 
 import database.Veritabani;
 import interfaces.IKullaniciIslemleri;
-import model.Admin;
 import model.Kullanici;
-import model.Operator;
 
 public class KullaniciService implements IKullaniciIslemleri {
 
@@ -62,11 +60,7 @@ public class KullaniciService implements IKullaniciIslemleri {
                 rs.close();
                 pstmt.close();
 
-                if (rol.equals("Admin")) {
-                    return new Admin(id, kullaniciAdi, rol);
-                } else {
-                    return new Operator(id, kullaniciAdi, rol);
-                }
+                return new Kullanici(id, kullaniciAdi, rol);
             }
 
             rs.close();
