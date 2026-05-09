@@ -681,18 +681,7 @@ public class PlanlamaEkrani extends OrtakEkran {
             return;
         }
 
-        int cevap = JOptionPane.showOptionDialog(
-                this,
-                "Seçili iş emri silinsin mi?",
-                "İş Emri Sil",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                new String[]{"Evet", "Hayır"},
-                "Hayır"
-        );
-
-        if (cevap == JOptionPane.YES_OPTION) {
+        if (silmeOnayi("Seçili iş emri silinsin mi?")) {
             boolean sonuc = planlamaService.planlamaSil(secilenPlanlamaId);
 
             if (sonuc) {
