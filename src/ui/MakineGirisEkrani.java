@@ -332,18 +332,7 @@ public class MakineGirisEkrani extends OrtakEkran {
 
         String makineKodu = model.getValueAt(secilenSatir, 1).toString();
 
-        int cevap = JOptionPane.showOptionDialog(
-                this,
-                "Bu makine kaydı silinsin mi?",
-                "Silme Onayı",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                new String[]{"Evet", "Hayır"},
-                "Hayır"
-        );
-
-        if (cevap == JOptionPane.YES_OPTION) {
+        if (silmeOnayi("Bu makine kaydı silinsin mi?")) {
             boolean sonuc = makineService.makineSil(makineKodu);
 
             if (sonuc) {
