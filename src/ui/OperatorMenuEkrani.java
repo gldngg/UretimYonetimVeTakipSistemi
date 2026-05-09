@@ -7,18 +7,13 @@ public class OperatorMenuEkrani extends AnaMenuEkrani {
     public OperatorMenuEkrani() {
         super("Operatör Menü");
 
-        int startX = 175;
-        int iconY = 250;
-        int labelY = 375;
-        int gap = 220;
+        ortakMenuElemanlariniEkle();
 
-        menuElemaniEkle("Raporlar", "/ui/raporlar.png", startX, iconY, labelY, "rapor");
-
-        menuElemaniEkle("Makine Girişi", "/ui/makineGirisi.png", startX + gap, iconY, labelY, "makine");
-
-        menuElemaniEkle("Planlama", "/ui/planlama.png", startX + gap * 2, iconY, labelY, "planlama");
-
-        menuElemaniEkle("Duruş/Kayıp", "/ui/durusKayip.png", startX + gap * 3, iconY, labelY, "durus");
+        menuElemaniEkle("Duruş/Kayıp", "/ui/durusKayip.png",
+                MENU_START_X + MENU_GAP * 3,
+                MENU_ICON_Y,
+                MENU_LABEL_Y,
+                "durus");
     }
 
     public static void main(String[] args) {
