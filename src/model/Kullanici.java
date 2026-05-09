@@ -1,102 +1,48 @@
-package service;
+package model;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+public class Kullanici {
 
-import database.Veritabani;
-import interfaces.IKullaniciIslemleri;
-import model.Kullanici;
+    private int id;
+    private String kullaniciAdi;
+    private String rol;
 
-public class KullaniciService implements IKullaniciIslemleri {
+    public Kullanici(int id, String kullaniciAdi, String rol) {
+        this.id = id;
+        this.kullaniciAdi = kullaniciAdi;
+        this.rol = rol;
+    }
 
-    @Override
-    public boolean kayitOl(Kullanici kullanici, String sifre) {
-        String sql = "INSERT INTO users(username, password, role) VALUES (?, ?, ?)";
-
-        try {
-            String sifrelenmisKullaniciAdi = Veritabani.sifrele(kullanici.getKullaniciAdi());
-            String hashlenmisSifre = Veritabani.getInstance().hashPassword(sifre);
-
-            PreparedStatement pstmt = Veritabani.getInstance().getConnection().prepareStatement(sql);
-
-            pstmt.setString(1, sifrelenmisKullaniciAdi);
-            pstmt.setString(2, hashlenmisSifre);
-            pstmt.setString(3, kullanici.getRol());
-
-            pstmt.executeUpdate();
-            pstmt.close();
-
-            return true;
-
-        } catch (SQLException e) {
-            System.err.println("Kullanıcı kayıt SQL hatası: " + e.getMessage());
-            return false;
-        } catch (Exception e) {
-            System.err.println("Kullanıcı kayıt hatası: " + e.getMessage());
-            return false;
+    public String yetkiBilgisi() {
+        if ("Admin".equalsIgnoreCase(rol)) {
+            return "Admin yetkisine sahip kullanıcı";
+        } else if ("Operator".equalsIgnoreCase(rol) || "Operatör".equalsIgnoreCase(rol)) {
+            return "Operatör yetkisine sahip kullanıcı";
+        } else {
+            return "Genel kullanıcı";
         }
     }
 
-    @Override
-    public Kullanici girisYap(String kullaniciAdi, String sifre, String rol) {
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ? AND role = ?";
-
-        try {
-            String sifrelenmisKullaniciAdi = Veritabani.sifrele(kullaniciAdi);
-            String hashlenmisSifre = Veritabani.getInstance().hashPassword(sifre);
-
-            PreparedStatement pstmt = Veritabani.getInstance().getConnection().prepareStatement(sql);
-
-            pstmt.setString(1, sifrelenmisKullaniciAdi);
-            pstmt.setString(2, hashlenmisSifre);
-            pstmt.setString(3, rol);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                int id = rs.getInt("id");
-
-                rs.close();
-                pstmt.close();
-
-                return new Kullanici(id, kullaniciAdi, rol);
-            }
-
-            rs.close();
-            pstmt.close();
-
-        } catch (SQLException e) {
-            System.err.println("Giriş SQL hatası: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("Giriş hatası: " + e.getMessage());
-        }
-
-        return null;
+    public int getId() {
+        return id;
     }
 
-    @Override
-    public boolean kullaniciAdiVarMi(String kullaniciAdi) {
-        String sql = "SELECT id FROM users WHERE username = ?";
+    public String getKullaniciAdi() {
+        return kullaniciAdi;
+    }
 
-        try {
-            String sifrelenmisKullaniciAdi = Veritabani.sifrele(kullaniciAdi);
+    public String getRol() {
+        return rol;
+    }
 
-            PreparedStatement pstmt = Veritabani.getInstance().getConnection().prepareStatement(sql);
-            pstmt.setString(1, sifrelenmisKullaniciAdi);
+    public void setId(int id) {
+        this.id = id;
+    }
 
-            ResultSet rs = pstmt.executeQuery();
+    public void setKullaniciAdi(String kullaniciAdi) {
+        this.kullaniciAdi = kullaniciAdi;
+    }
 
-            boolean varMi = rs.next();
-
-            rs.close();
-            pstmt.close();
-
-            return varMi;
-
-        } catch (Exception e) {
-            System.err.println("Kullanıcı adı kontrol hatası: " + e.getMessage());
-            return false;
-        }
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 }
