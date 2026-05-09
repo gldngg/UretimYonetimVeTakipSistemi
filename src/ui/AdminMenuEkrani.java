@@ -7,18 +7,13 @@ public class AdminMenuEkrani extends AnaMenuEkrani {
     public AdminMenuEkrani() {
         super("Admin Menü");
 
-        int startX = 120;
-        int iconY = 220;
-        int labelY = 350;
-        int gap = 200;
+        ortakMenuElemanlariniEkle();
 
-        menuElemaniEkle("Raporlar", "/ui/raporlar.png", startX, iconY, labelY, "rapor");
-
-        menuElemaniEkle("Makine Girişi", "/ui/makineGirisi.png", startX + gap, iconY, labelY, "makine");
-
-        menuElemaniEkle("Planlama", "/ui/planlama.png", startX + gap * 2, iconY, labelY, "planlama");
-
-        menuElemaniEkle("Sipariş Girişi", "/ui/siparis.png", startX + gap * 3, iconY, labelY, "siparis");
+        menuElemaniEkle("Sipariş Girişi", "/ui/siparis.png",
+                MENU_START_X + MENU_GAP * 3,
+                MENU_ICON_Y,
+                MENU_LABEL_Y,
+                "siparis");
     }
 
     public static void main(String[] args) {
