@@ -607,18 +607,9 @@ public class DurusKayipEkrani extends OrtakEkran {
             return;
         }
 
-        int cevap = JOptionPane.showOptionDialog(
-                this,
-                "Bu duruş/kayıp kaydı silinsin mi?",
-                "Silme Onayı",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                new String[]{"Evet", "Hayır"},
-                "Hayır"
-        );
+       
 
-        if (cevap == JOptionPane.YES_OPTION) {
+        if (silmeOnayi("Bu duruş/kayıp kaydı silinsin mi?")) {
             boolean sonuc = durusKayipService.durusKayipSil(secilenId);
 
             if (sonuc) {
