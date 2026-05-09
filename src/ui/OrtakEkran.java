@@ -12,6 +12,7 @@ import javax.swing.SwingConstants;
 import database.Session;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 
 public class OrtakEkran extends JFrame {
@@ -218,6 +219,19 @@ public class OrtakEkran extends JFrame {
             dispose();
         });
     }
-    
-    
+
+    protected boolean silmeOnayi(String mesaj) {
+        int cevap = JOptionPane.showOptionDialog(
+                this,
+                mesaj,
+                "Silme Onayı",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new String[]{"Evet", "Hayır"},
+                "Hayır"
+        );
+
+        return cevap == JOptionPane.YES_OPTION;
+    }
 }
