@@ -1,8 +1,3 @@
-Mevcut README’yi koruyup **yeni `AnaMenuEkrani` kalıtım değişikliğine göre güncelledim**. Özellikle `ui`, `Inheritance`, `Admin Menü`, `Operatör Menü` ve ortak ekran yapısı kısımlarını düzelttim. Mevcut README içeriğini baz aldım. 
-
-Aşağıdakini direkt **README.md** içine kopyalayabilirsin:
-
-
 # Üretim Yönetim ve Takip Sistemi
 
 Bu proje, üretim süreçlerinde makine, sipariş, planlama, duruş/kayıp ve raporlama işlemlerini takip etmek amacıyla geliştirilmiş bir masaüstü uygulamasıdır.
